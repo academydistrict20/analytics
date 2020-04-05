@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "bowser": "^2.9.0"
+    "bowser": "^2.9.0",
+    "lint-staged": "^10.1.2"
   },
   "devDependencies": {
     "@types/jest": "^25.2.1",
@@ -29,13 +30,13 @@
   "license": "MIT",
   "husky": {
     "hooks": {
-      "pre-commit": "npx tsc --noEmit && npm test",
+      "pre-commit": "npx tsc --noEmit && npm test && lint-staged",
       "pre-push": "npm test"
     }
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
-      "eslint --fix",
+      "eslint --cache --fix",
       "git add"
     ]
   }
