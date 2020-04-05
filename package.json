@@ -29,7 +29,7 @@
   "license": "MIT",
   "husky": {
     "hooks": {
-      "pre-commit": "npx tsc --noEmit && lint-staged",
+      "pre-commit": "npx tsc && lint-staged",
       "pre-push": "npm test"
     }
   },
