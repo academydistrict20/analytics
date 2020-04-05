@@ -1,5 +1,6 @@
 import { clear, mockUserAgent } from 'jest-useragent-mock'
-import client, { AnalyticsContext } from '../../src/client'
+import client from '../../src/client'
+import { AnalyticsContext } from '../../src/context'
 
 let context: AnalyticsContext | null
 const agent =
@@ -10,9 +11,13 @@ const path =
 
 describe('client', () => {
   beforeAll(() => {
+    // Set userAgent
     mockUserAgent(agent)
+    // Set Referrer
     Object.defineProperty(document, 'referrer', { value: referrer, configurable: true })
+    // Set window.location
     window.history.pushState({}, '', path)
+    // Create client, store context
     context = client().context
   })
   afterAll(() => {
