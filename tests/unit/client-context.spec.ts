@@ -41,7 +41,7 @@ describe('client', () => {
 
   test('has domain', () => {
     expect(context?.domain).toBeDefined()
-    expect(context?.domain).toBe('www.website.com')
+    expect(context?.domain).toBe('www.website.coms')
   })
 
   test('has path', () => {
