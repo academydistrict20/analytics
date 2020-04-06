@@ -7,6 +7,7 @@ export interface AnalyticsContext {
   referrer: string | null
   domain: string | null
   path: string | null
+  unique: boolean
 
   browser: string | null
   browserVersion: string | null
@@ -71,13 +72,16 @@ export function getContext(): AnalyticsContext | null {
 
   const ua = Bowser.getParser(window.navigator.userAgent)
   const params = new URLSearchParams(window.location.search.slice(1))
+  const referrer = document.referrer
+  const domain = window.location.hostname
 
   return {
     networkMbps: getNetworkMbps(),
     url: window.location.href,
-    referrer: document.referrer,
-    domain: window.location.hostname,
+    referrer,
+    domain,
     path: window.location.pathname,
+    unique: !referrer.includes(domain),
     browser: ua.getBrowserName() || null,
     browserVersion: ua.getBrowserVersion() || null,
     os: ua.getOSName(),

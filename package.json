@@ -23,7 +23,7 @@
   },
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch --all",
+    "test:watch": "jest --watch-all --collect-coverage",
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
   },
   "author": "",
