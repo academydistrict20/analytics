@@ -1,8 +1,8 @@
 import { AnalyticsContext, getContext } from './context'
-import { AnalyticsEvent } from './events'
+import { AnalyticsEvent, createPageViewEvent } from './events'
 
 export interface AnalyticsClient {
-  context: AnalyticsContext | null
+  context: AnalyticsContext
   events: AnalyticsEvent[]
 }
 
@@ -13,6 +13,9 @@ export default function createClient(): AnalyticsClient {
     context,
     events: [],
   }
+
+  const pageViewEvent = createPageViewEvent({ context: context, data: {} })
+  client.events.push(pageViewEvent)
 
   return client
 }

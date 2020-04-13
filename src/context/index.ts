@@ -67,9 +67,7 @@ export interface AnalyticsContext {
   utmTerm: string | null
 }
 
-export function getContext(): AnalyticsContext | null {
-  if (typeof window === undefined) return null
-
+export function getContext(): AnalyticsContext {
   const ua = Bowser.getParser(window.navigator.userAgent)
   const params = new URLSearchParams(window.location.search.slice(1))
   const referrer = document.referrer
