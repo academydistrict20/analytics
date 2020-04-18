@@ -1,4 +1,4 @@
-import uuid from 'uuid/v1'
+import { v4 as uuid } from 'uuid'
 import finder from '@medv/finder'
 import { AnalyticsContext } from '../context'
 
@@ -11,6 +11,7 @@ export enum EventTypes {
 export interface AnalyticsEventData {
   elementSelector?: string
   elementText?: string
+  [key: string]: unknown
 }
 
 export interface AnalyticsEvent {
@@ -31,16 +32,16 @@ export function createPageViewEvent(options: {
     id: uuid(),
     label: 'Page View',
     type: EventTypes.pageView,
-    data: {},
+    data: options.data || {},
     context: options.context,
     timestamp: new Date().valueOf(),
   }
 }
 
 export function createActionEvent(options: {
-  label: string | null
   context: AnalyticsContext
   data: AnalyticsEventData
+  label?: string
   event?: Event
   element?: Element
   timestamp?: number
@@ -73,7 +74,7 @@ export function createActionEvent(options: {
 }
 
 export function createClickEvent(options: {
-  label: string | null
+  label?: string
   context: AnalyticsContext
   data: AnalyticsEventData
   timestamp?: number

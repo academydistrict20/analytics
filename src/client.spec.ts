@@ -1,6 +1,6 @@
-import { AnalyticsClient } from './../../src/client'
-import { setupEnvironment } from './helpers/setup'
-import { EventTypes } from '../../src/events'
+import { AnalyticsClient } from './client'
+import { setupEnvironment } from '../tests/unit/helpers/setup'
+import { EventTypes } from './events/index'
 
 let client: AnalyticsClient
 
@@ -9,11 +9,11 @@ describe('client events', () => {
     client = setupEnvironment()
   })
 
-  test('exist', () => {
+  it('exist', () => {
     expect(client.events).toBeDefined()
   })
 
-  test('create PageView event', () => {
+  it('create PageView event', () => {
     expect(client.events.find((e) => e.type === EventTypes.pageView)).toBeDefined()
   })
 })
