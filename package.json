@@ -1,6 +1,6 @@
 {
   "name": "@asd20/analytics",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "publishConfig": {
