@@ -1,6 +1,6 @@
 {
   "name": "@academydistrict20/analytics",
-  "version": "0.0.0-development",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "publishConfig": {
