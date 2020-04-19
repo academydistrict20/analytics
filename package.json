@@ -1,9 +1,11 @@
 {
   "name": "@asd20/analytics",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "",
   "main": "index.js",
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/academydistrict20/analytics.git"
@@ -30,12 +32,14 @@
     "lint-staged": "^10.1.2",
     "prettier": "^2.0.2",
     "ts-jest": "^25.3.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "semantic-release": "^17.0.6"
   },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch-all --collect-coverage",
-    "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
+    "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "semantic-release": "semantic-release"
   },
   "author": "",
   "license": "MIT",
