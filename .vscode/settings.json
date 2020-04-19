@@ -5,5 +5,8 @@
   "editor.formatOnSave": false,
   "[typescript]": {
     "editor.formatOnSave": false
-  }
+  },
+  "conventionalCommits.scopes": [
+    "commit-hooks"
+  ]
 }

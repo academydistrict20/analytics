@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
   "repository": {
     "type": "git",
     "url": "https://github.com/academydistrict20/analytics.git"
@@ -14,18 +15,21 @@
     "uuid": "^7.0.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
     "@types/jest": "^25.2.1",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
+    "commitizen": "^4.0.4",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
     "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.2.3",
     "jest": "^25.2.7",
     "jest-useragent-mock": "^0.1.1",
+    "lint-staged": "^10.1.2",
     "prettier": "^2.0.2",
     "ts-jest": "^25.3.1",
-    "lint-staged": "^10.1.2",
     "typescript": "^3.8.3"
   },
   "scripts": {
@@ -38,7 +42,8 @@
   "husky": {
     "hooks": {
       "pre-commit": "npx tsc --noEmit && lint-staged",
-      "pre-push": "npm test"
+      "pre-push": "npm test",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
