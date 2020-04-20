@@ -1,4 +1,4 @@
-import { AnalyticsClient } from './client'
+import createClient, { AnalyticsClient } from './client'
 import { setupEnvironment } from '../tests/unit/helpers/setup'
 import { EventTypes } from './events/index'
 
@@ -39,17 +39,26 @@ describe('client', () => {
     expect(client.events.find((e) => e.type === EventTypes.click && e.label === 'Clicked Buy')).toBeDefined()
   })
 
-  it('error() adds a new error event with data specified', () => {
-    client.error({
-      label: 'Custom Error',
-      data: {
-        message: 'Error Message',
-        source: 'file.js',
-        lineno: 10,
-        colno: 13,
-        error: null,
-      },
+  describe('errors', () => {
+    it('error() adds a new error event with data specified', () => {
+      client.error({
+        label: 'Custom Error',
+        data: {
+          message: 'Error Message',
+          source: 'file.js',
+          lineno: 10,
+          colno: 13,
+          error: null,
+        },
+      })
+      expect(client.events.find((e) => e.type === EventTypes.error && e.label === 'Custom Error')).toBeDefined()
     })
-    expect(client.events.find((e) => e.type === EventTypes.error && e.label === 'Custom Error')).toBeDefined()
+    it('throwing an error creates a new error event', () => {
+      window.onerror?.call('', 'My Error', 'file.js', 1, 0)
+      const errorEvent = client.events[client.events.length - 1]
+      expect(window.onerror).toBeCalled
+      expect(errorEvent).toBeDefined()
+      expect(errorEvent?.data.message).toBe('My Error')
+    })
   })
 })
