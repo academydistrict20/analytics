@@ -33,4 +33,18 @@ describe('client', () => {
     client.click({ label: 'Clicked Buy' })
     expect(client.events.find((e) => e.type === EventTypes.click && e.label === 'Clicked Buy')).toBeDefined()
   })
+
+  it('error() adds a new error event with data specified', () => {
+    client.error({
+      label: 'Custom Error',
+      data: {
+        message: 'Error Message',
+        source: 'file.js',
+        lineno: 10,
+        colno: 13,
+        error: null,
+      },
+    })
+    expect(client.events.find((e) => e.type === EventTypes.error && e.label === 'Custom Error')).toBeDefined()
+  })
 })

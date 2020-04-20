@@ -4,8 +4,10 @@ import { AnalyticsContext } from '../context'
 
 export enum EventTypes {
   pageView = 'pageView',
+  event = 'event',
   action = 'action',
   click = 'click',
+  error = 'error',
 }
 
 export interface AnalyticsEventData {
@@ -23,26 +25,26 @@ export interface AnalyticsEvent {
   context: AnalyticsContext
 }
 
-export function pageViewEventFactory(options: {
+/**
+ * Creates a new base AnalyticsEvent object
+ *
+ * @export
+ * @param {{
+ *   context: AnalyticsContext
+ *   type?: EventTypes
+ *   label?: string
+ *   data?: AnalyticsEventData
+ *   event?: Event
+ *   element?: Element
+ *   timestamp?: number
+ * }} options
+ * @returns {AnalyticsEvent}
+ */
+export function eventFactory(options: {
+  context: AnalyticsContext
+  type?: EventTypes
   label?: string
   data?: AnalyticsEventData
-  context: AnalyticsContext
-  timestamp?: number
-}): AnalyticsEvent {
-  return {
-    id: uuid(),
-    label: options.label || 'Page View',
-    type: EventTypes.pageView,
-    data: options.data || {},
-    context: options.context,
-    timestamp: new Date().valueOf(),
-  }
-}
-
-export function actionEventFactory(options: {
-  context: AnalyticsContext
-  data?: AnalyticsEventData
-  label?: string
   event?: Event
   element?: Element
   timestamp?: number
@@ -54,8 +56,8 @@ export function actionEventFactory(options: {
   const event: AnalyticsEvent = {
     id: uuid(),
     context: options.context,
-    label: options.label || 'Action',
-    type: EventTypes.action,
+    label: options.label || 'Event',
+    type: options.type || EventTypes.event,
     data: {},
     timestamp: options.timestamp || new Date().valueOf(),
   }
@@ -74,6 +76,35 @@ export function actionEventFactory(options: {
   return event
 }
 
+export function errorEventFactory(options: {
+  label?: string
+  data?: AnalyticsEventData
+  context: AnalyticsContext
+  timestamp?: number
+}): AnalyticsEvent {
+  return { ...eventFactory(options), label: options.label || 'Error', type: EventTypes.error }
+}
+
+export function pageViewEventFactory(options: {
+  label?: string
+  data?: AnalyticsEventData
+  context: AnalyticsContext
+  timestamp?: number
+}): AnalyticsEvent {
+  return { ...eventFactory(options), label: options.label || 'Page View', type: EventTypes.pageView }
+}
+
+export function actionEventFactory(options: {
+  context: AnalyticsContext
+  data?: AnalyticsEventData
+  label?: string
+  event?: Event
+  element?: Element
+  timestamp?: number
+}): AnalyticsEvent {
+  return { ...eventFactory(options), label: options.label || 'Action', type: EventTypes.action }
+}
+
 export function clickEventFactory(options: {
   label?: string
   data?: AnalyticsEventData
@@ -82,5 +113,5 @@ export function clickEventFactory(options: {
   timestamp?: number
   context: AnalyticsContext
 }): AnalyticsEvent {
-  return { ...actionEventFactory(options), label: options.label || 'Click', type: EventTypes.click }
+  return { ...eventFactory(options), label: options.label || 'Click', type: EventTypes.click }
 }

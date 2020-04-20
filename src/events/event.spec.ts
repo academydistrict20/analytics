@@ -1,6 +1,13 @@
 import { AnalyticsClient } from '../client'
 import { setupEnvironment } from '../../tests/unit/helpers/setup'
-import { EventTypes, pageViewEventFactory, actionEventFactory, clickEventFactory } from '.'
+import {
+  EventTypes,
+  eventFactory,
+  pageViewEventFactory,
+  actionEventFactory,
+  clickEventFactory,
+  errorEventFactory,
+} from '.'
 
 let client: AnalyticsClient
 
@@ -9,18 +16,7 @@ describe('events', () => {
     client = setupEnvironment()
   })
 
-  describe('pageViewEventFactory', () => {
-    it('outputs pageView event', () => {
-      const event = pageViewEventFactory({
-        context: client.context,
-        data: {},
-      })
-      expect(event).toBeDefined()
-      expect(event.type).toBe(EventTypes.pageView)
-    })
-  })
-
-  describe('actionEventFactory', () => {
+  describe('eventFactory', () => {
     beforeAll(() => {
       const el = document.createElement('button')
       el.id = 'my-btn'
@@ -32,11 +28,20 @@ describe('events', () => {
       if (el) document.body.removeChild(el)
     })
 
-    it('outputs action event', () => {
-      const event = actionEventFactory({
+    it('outputs event', () => {
+      const event = eventFactory({
         label: 'User Performed Action',
         context: client.context,
         data: {},
+      })
+      expect(event).toBeDefined()
+      expect(event.type).toBe(EventTypes.event)
+    })
+
+    it('event type is assigned', () => {
+      const event = eventFactory({
+        type: EventTypes.action,
+        context: client.context,
       })
       expect(event).toBeDefined()
       expect(event.type).toBe(EventTypes.action)
@@ -44,8 +49,8 @@ describe('events', () => {
 
     it('given button element, returns element text', () => {
       const el = document.getElementById('my-btn')
-      const event = actionEventFactory({
-        label: 'User Performed Action',
+      const event = eventFactory({
+        label: 'Custom Event',
         context: client.context,
         data: {},
         element: el || undefined,
@@ -55,8 +60,8 @@ describe('events', () => {
 
     it('given button element, returns element selector', () => {
       const el = document.getElementById('my-btn')
-      const event = actionEventFactory({
-        label: 'User Performed Action',
+      const event = eventFactory({
+        label: 'Custom Event',
         context: client.context,
         data: {},
         element: el || undefined,
@@ -67,7 +72,7 @@ describe('events', () => {
     it('merges input data with output data', () => {
       const el = document.getElementById('my-btn')
 
-      const event = actionEventFactory({
+      const event = eventFactory({
         label: 'User Performed Action',
         context: client.context,
         data: {
@@ -80,7 +85,7 @@ describe('events', () => {
       expect(event.data.elementText).toBe('Btn Label')
     })
 
-    it('given just an event, returns element selector', (done) => {
+    it('from a click event, returns element selector', (done) => {
       const el = document.getElementById('my-btn')
       if (el) {
         el.addEventListener('click', (e) => {
@@ -98,6 +103,26 @@ describe('events', () => {
 
         el.click()
       }
+    })
+  })
+
+  describe('actionEventFactory', () => {
+    it('outputs pageView event', () => {
+      const event = actionEventFactory({
+        context: client.context,
+      })
+      expect(event).toBeDefined()
+      expect(event.type).toBe(EventTypes.action)
+    })
+  })
+
+  describe('pageViewEventFactory', () => {
+    it('outputs pageView event', () => {
+      const event = pageViewEventFactory({
+        context: client.context,
+      })
+      expect(event).toBeDefined()
+      expect(event.type).toBe(EventTypes.pageView)
     })
   })
 
@@ -130,6 +155,24 @@ describe('events', () => {
       })
       expect(event).toBeDefined()
       expect(event.label).toBe('Clickity')
+    })
+  })
+
+  describe('errorEventFactory', () => {
+    it('outputs error event', () => {
+      const event = errorEventFactory({
+        context: client.context,
+        label: 'Custom Error',
+        data: {
+          message: 'Error Message',
+          source: 'file.js',
+          lineno: 10,
+          colno: 13,
+          error: null,
+        },
+      })
+      expect(event).toBeDefined()
+      expect(event.type).toBe(EventTypes.error)
     })
   })
 })
