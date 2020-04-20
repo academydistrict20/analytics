@@ -4,16 +4,33 @@ import { EventTypes } from './events/index'
 
 let client: AnalyticsClient
 
-describe('client events', () => {
+describe('client', () => {
   beforeAll(() => {
     client = setupEnvironment()
   })
 
-  it('exist', () => {
+  it('has events', () => {
     expect(client.events).toBeDefined()
   })
 
-  it('create PageView event', () => {
+  it('creates pageView event automatically', () => {
     expect(client.events.find((e) => e.type === EventTypes.pageView)).toBeDefined()
+  })
+
+  it('pageView() adds a new pageView event with data we specified', () => {
+    client.pageView({ data: { id: 'page' } })
+    expect(client.events.find((e) => e.type === EventTypes.pageView && e.data.id === 'page')).toBeDefined()
+  })
+
+  it('action() adds a new action event with label specified', () => {
+    client.action({ label: 'Dismissed Notification' })
+    expect(
+      client.events.find((e) => e.type === EventTypes.action && e.label === 'Dismissed Notification'),
+    ).toBeDefined()
+  })
+
+  it('click() adds a new click event with label specified', () => {
+    client.click({ label: 'Clicked Buy' })
+    expect(client.events.find((e) => e.type === EventTypes.click && e.label === 'Clicked Buy')).toBeDefined()
   })
 })

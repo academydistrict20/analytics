@@ -1,6 +1,6 @@
 import { AnalyticsClient } from '../client'
 import { setupEnvironment } from '../../tests/unit/helpers/setup'
-import { EventTypes, createPageViewEvent, createActionEvent, createClickEvent } from '.'
+import { EventTypes, pageViewEventFactory, actionEventFactory, clickEventFactory } from '.'
 
 let client: AnalyticsClient
 
@@ -9,9 +9,9 @@ describe('events', () => {
     client = setupEnvironment()
   })
 
-  describe('createPageViewEvent', () => {
+  describe('pageViewEventFactory', () => {
     it('outputs pageView event', () => {
-      const event = createPageViewEvent({
+      const event = pageViewEventFactory({
         context: client.context,
         data: {},
       })
@@ -20,7 +20,7 @@ describe('events', () => {
     })
   })
 
-  describe('createActionEvent', () => {
+  describe('actionEventFactory', () => {
     beforeAll(() => {
       const el = document.createElement('button')
       el.id = 'my-btn'
@@ -33,7 +33,7 @@ describe('events', () => {
     })
 
     it('outputs action event', () => {
-      const event = createActionEvent({
+      const event = actionEventFactory({
         label: 'User Performed Action',
         context: client.context,
         data: {},
@@ -44,7 +44,7 @@ describe('events', () => {
 
     it('given button element, returns element text', () => {
       const el = document.getElementById('my-btn')
-      const event = createActionEvent({
+      const event = actionEventFactory({
         label: 'User Performed Action',
         context: client.context,
         data: {},
@@ -55,7 +55,7 @@ describe('events', () => {
 
     it('given button element, returns element selector', () => {
       const el = document.getElementById('my-btn')
-      const event = createActionEvent({
+      const event = actionEventFactory({
         label: 'User Performed Action',
         context: client.context,
         data: {},
@@ -67,7 +67,7 @@ describe('events', () => {
     it('merges input data with output data', () => {
       const el = document.getElementById('my-btn')
 
-      const event = createActionEvent({
+      const event = actionEventFactory({
         label: 'User Performed Action',
         context: client.context,
         data: {
@@ -84,7 +84,7 @@ describe('events', () => {
       const el = document.getElementById('my-btn')
       if (el) {
         el.addEventListener('click', (e) => {
-          const event = createActionEvent({
+          const event = actionEventFactory({
             label: 'User Performed Action',
             context: client.context,
             data: {},
@@ -101,7 +101,7 @@ describe('events', () => {
     })
   })
 
-  describe('createClickEvent', () => {
+  describe('clickEventFactory', () => {
     beforeAll(() => {
       const el = document.createElement('button')
       el.id = 'my-btn'
@@ -114,7 +114,7 @@ describe('events', () => {
     })
 
     it('outputs click event', () => {
-      const event = createClickEvent({
+      const event = clickEventFactory({
         context: client.context,
         data: {},
       })
@@ -123,7 +123,7 @@ describe('events', () => {
     })
 
     it('outputs allows label override', () => {
-      const event = createClickEvent({
+      const event = clickEventFactory({
         label: 'Clickity',
         context: client.context,
         data: {},

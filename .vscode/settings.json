@@ -8,6 +8,7 @@
   },
   "conventionalCommits.scopes": [
     "commit-hooks",
-    "release"
+    "release",
+    "client"
   ]
 }

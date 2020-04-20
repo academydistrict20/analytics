@@ -23,14 +23,15 @@ export interface AnalyticsEvent {
   context: AnalyticsContext
 }
 
-export function createPageViewEvent(options: {
+export function pageViewEventFactory(options: {
+  label?: string
+  data?: AnalyticsEventData
   context: AnalyticsContext
-  data: AnalyticsEventData
   timestamp?: number
 }): AnalyticsEvent {
   return {
     id: uuid(),
-    label: 'Page View',
+    label: options.label || 'Page View',
     type: EventTypes.pageView,
     data: options.data || {},
     context: options.context,
@@ -38,9 +39,9 @@ export function createPageViewEvent(options: {
   }
 }
 
-export function createActionEvent(options: {
+export function actionEventFactory(options: {
   context: AnalyticsContext
-  data: AnalyticsEventData
+  data?: AnalyticsEventData
   label?: string
   event?: Event
   element?: Element
@@ -52,10 +53,10 @@ export function createActionEvent(options: {
   // Create new event
   const event: AnalyticsEvent = {
     id: uuid(),
+    context: options.context,
     label: options.label || 'Action',
     type: EventTypes.action,
     data: {},
-    context: options.context,
     timestamp: options.timestamp || new Date().valueOf(),
   }
 
@@ -73,13 +74,13 @@ export function createActionEvent(options: {
   return event
 }
 
-export function createClickEvent(options: {
+export function clickEventFactory(options: {
   label?: string
-  context: AnalyticsContext
-  data: AnalyticsEventData
-  timestamp?: number
+  data?: AnalyticsEventData
   event?: Event
   element?: Element
+  timestamp?: number
+  context: AnalyticsContext
 }): AnalyticsEvent {
-  return { ...createActionEvent(options), label: options.label || 'Click', type: EventTypes.click }
+  return { ...actionEventFactory(options), label: options.label || 'Click', type: EventTypes.click }
 }
