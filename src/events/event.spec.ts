@@ -1,17 +1,10 @@
 import { AnalyticsClient } from '../client'
 import { setupEnvironment } from '../../tests/unit/helpers/setup'
-import {
-  EventTypes,
-  eventFactory,
-  pageViewEventFactory,
-  actionEventFactory,
-  clickEventFactory,
-  errorEventFactory,
-} from '.'
+import { EventTypes, eventFactory } from '.'
 
 let client: AnalyticsClient
 
-describe('events', () => {
+describe('client.events', () => {
   beforeAll(() => {
     client = setupEnvironment()
   })
@@ -58,6 +51,18 @@ describe('events', () => {
       expect(event.data.elementText).toBe('Btn Label')
     })
 
+    it('given empty div element, returns no elementText', () => {
+      const el = document.createElement('div')
+      el.id = 'empty-div'
+      document.body.appendChild(el)
+      const event = eventFactory({
+        context: client.context,
+        element: el,
+      })
+
+      expect(event.data.elementText).toBe('')
+    })
+
     it('given button element, returns element selector', () => {
       const el = document.getElementById('my-btn')
       const event = eventFactory({
@@ -89,7 +94,7 @@ describe('events', () => {
       const el = document.getElementById('my-btn')
       if (el) {
         el.addEventListener('click', (e) => {
-          const event = actionEventFactory({
+          const event = eventFactory({
             label: 'User Performed Action',
             context: client.context,
             data: {},
@@ -104,75 +109,14 @@ describe('events', () => {
         el.click()
       }
     })
-  })
-
-  describe('actionEventFactory', () => {
-    it('outputs pageView event', () => {
-      const event = actionEventFactory({
-        context: client.context,
-      })
-      expect(event).toBeDefined()
-      expect(event.type).toBe(EventTypes.action)
-    })
-  })
-
-  describe('pageViewEventFactory', () => {
-    it('outputs pageView event', () => {
-      const event = pageViewEventFactory({
-        context: client.context,
-      })
-      expect(event).toBeDefined()
-      expect(event.type).toBe(EventTypes.pageView)
-    })
-  })
-
-  describe('clickEventFactory', () => {
-    beforeAll(() => {
-      const el = document.createElement('button')
-      el.id = 'my-btn'
-      el.innerHTML = 'Btn Label'
-      document.body.appendChild(el)
-    })
-    afterAll(() => {
-      const el = document.getElementById('my-btn')
-      if (el) document.body.removeChild(el)
-    })
-
-    it('outputs click event', () => {
-      const event = clickEventFactory({
-        context: client.context,
-        data: {},
-      })
-      expect(event).toBeDefined()
-      expect(event.type).toBe(EventTypes.click)
-    })
 
     it('outputs allows label override', () => {
-      const event = clickEventFactory({
+      const event = eventFactory({
         label: 'Clickity',
         context: client.context,
-        data: {},
       })
       expect(event).toBeDefined()
       expect(event.label).toBe('Clickity')
-    })
-  })
-
-  describe('errorEventFactory', () => {
-    it('outputs error event', () => {
-      const event = errorEventFactory({
-        context: client.context,
-        label: 'Custom Error',
-        data: {
-          message: 'Error Message',
-          source: 'file.js',
-          lineno: 10,
-          colno: 13,
-          error: null,
-        },
-      })
-      expect(event).toBeDefined()
-      expect(event.type).toBe(EventTypes.error)
     })
   })
 })

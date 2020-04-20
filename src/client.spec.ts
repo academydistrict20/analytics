@@ -17,6 +17,11 @@ describe('client', () => {
     expect(client.events.find((e) => e.type === EventTypes.pageView)).toBeDefined()
   })
 
+  it('pageView() returns event with default label', () => {
+    client.pageView({ data: { id: 'defualt-label' } })
+    expect(client.events.find((e) => e.data.id === 'defualt-label' && e.label === 'Page View')).toBeDefined()
+  })
+
   it('pageView() adds a new pageView event with data we specified', () => {
     client.pageView({ data: { id: 'page' } })
     expect(client.events.find((e) => e.type === EventTypes.pageView && e.data.id === 'page')).toBeDefined()

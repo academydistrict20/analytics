@@ -52,6 +52,11 @@ describe('client.context', () => {
     expect(mbps).toBe(2)
   })
 
+  it('provides a mbps without timings provided', () => {
+    const mbps = getNetworkMbps()
+    expect(mbps).toBe(0)
+  })
+
   it('has networkMbps', () => {
     expect(client.context?.networkMbps).toBeDefined()
   })

@@ -39,28 +39,32 @@ export default function createClient(): AnalyticsClient {
   const client: AnalyticsClient = {
     context,
     events: [],
+
     pageView(options) {
       const event = eventFactory({
+        label: 'Page View',
         ...options,
-        label: options?.label || 'Page View',
         type: EventTypes.pageView,
         context,
       })
       this.events.push(event)
       return event
     },
+
     click(options) {
-      const event = eventFactory({ ...options, label: options?.label || 'Click', type: EventTypes.click, context })
+      const event = eventFactory({ label: 'Click', ...options, type: EventTypes.click, context })
       this.events.push(event)
       return event
     },
+
     action(options) {
-      const event = eventFactory({ ...options, label: options?.label || 'Action', type: EventTypes.action, context })
+      const event = eventFactory({ label: 'Action', ...options, type: EventTypes.action, context })
       this.events.push(event)
       return event
     },
+
     error(options) {
-      const event = eventFactory({ ...options, label: options?.label || 'Error', type: EventTypes.error, context })
+      const event = eventFactory({ label: 'Error', ...options, type: EventTypes.error, context })
       this.events.push(event)
       return event
     },
