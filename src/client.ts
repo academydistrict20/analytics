@@ -1,11 +1,5 @@
 import { AnalyticsContext, getContext } from './context'
-import {
-  AnalyticsEvent,
-  pageViewEventFactory,
-  AnalyticsEventData,
-  actionEventFactory,
-  clickEventFactory,
-} from './events'
+import { AnalyticsEvent, AnalyticsEventData, EventTypes, eventFactory } from './events'
 
 export interface AnalyticsClient {
   context: AnalyticsContext
@@ -25,6 +19,18 @@ export interface AnalyticsClient {
     element?: Element
     timestamp?: number
   }): AnalyticsEvent
+  error(options?: {
+    label?: string
+    data?: AnalyticsEventData
+    event?: Event
+    element?: Element
+    timestamp?: number
+    message?: string
+    source?: string
+    lineno?: number
+    colno?: number
+    error?: Error
+  }): AnalyticsEvent
 }
 
 export default function createClient(): AnalyticsClient {
@@ -34,17 +40,27 @@ export default function createClient(): AnalyticsClient {
     context,
     events: [],
     pageView(options) {
-      const event = pageViewEventFactory({ ...options, context })
+      const event = eventFactory({
+        ...options,
+        label: options?.label || 'Page View',
+        type: EventTypes.pageView,
+        context,
+      })
       this.events.push(event)
       return event
     },
     click(options) {
-      const event = clickEventFactory({ ...options, context })
+      const event = eventFactory({ ...options, label: options?.label || 'Click', type: EventTypes.click, context })
       this.events.push(event)
       return event
     },
     action(options) {
-      const event = actionEventFactory({ ...options, context })
+      const event = eventFactory({ ...options, label: options?.label || 'Action', type: EventTypes.action, context })
+      this.events.push(event)
+      return event
+    },
+    error(options) {
+      const event = eventFactory({ ...options, label: options?.label || 'Error', type: EventTypes.error, context })
       this.events.push(event)
       return event
     },
