@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/academydistrict20/analytics/compare/v1.0.1...v1.1.0) (2020-04-20)
+
+
+### Features
+
+* **client:** :sparkles: add pageView, click and action methods for creating events ([e5ecc30](https://github.com/academydistrict20/analytics/commit/e5ecc304cc78264cb509700c250607712c3adce9))
+
 ## [1.0.1](https://github.com/academydistrict20/analytics/compare/v1.0.0...v1.0.1) (2020-04-19)
 
 
