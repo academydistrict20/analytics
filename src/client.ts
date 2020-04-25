@@ -36,7 +36,9 @@ export interface AnalyticsClient {
     error?: Error
   }): AnalyticsEvent
 
-  onUnload(event: Event): void
+  onLoad(event?: Event): void
+  onUnload(event?: Event): void
+  onError(event?: ErrorEvent): void
 }
 
 export default function createClient(options?: { disableErrorWatching?: boolean }): AnalyticsClient {
@@ -88,28 +90,32 @@ export default function createClient(options?: { disableErrorWatching?: boolean 
       return event
     },
 
+    onLoad() {
+      this.pageView()
+    },
+
     onUnload() {
       this.pageExit()
     },
-  }
 
-  const handleError: OnErrorEventHandlerNonNull = (
-    message: string | Event,
-    source?: string,
-    lineno?: number,
-    colno?: number,
-    error?: Error,
-  ) => {
-    client.error({
-      data: { message, source, lineno, colno, error },
-    })
+    onError(event: ErrorEvent) {
+      const { message, source, lineno, colno, error } = event?.error || new Error('unknown')
+      client.error({
+        data: { message, source, lineno, colno, error },
+      })
+    },
   }
-
-  // TODO: Move into onload
-  client.pageView()
 
   if (!options.disableErrorWatching) {
-    window.onerror = handleError
+    window.addEventListener('error', client.onError.bind(client))
+  }
+
+  if (document.readyState !== 'complete') {
+    // loading yet, wait for the event
+    document.addEventListener('DOMContentLoaded', client.onLoad.bind(client))
+  } else {
+    // DOM is ready!
+    client.onLoad.bind(client)
   }
 
   window.addEventListener('unload', client.onUnload.bind(client))
