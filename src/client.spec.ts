@@ -1,10 +1,10 @@
-import createClient, { AnalyticsClient } from './client'
+import { AnalyticsClient } from './client'
 import { setupEnvironment } from '../tests/unit/helpers/setup'
 import { EventTypes } from './events/index'
 
-let client: AnalyticsClient
-
 describe('client', () => {
+  let client: AnalyticsClient
+
   beforeAll(() => {
     client = setupEnvironment()
   })
@@ -25,6 +25,19 @@ describe('client', () => {
   it('pageView() adds a new pageView event with data we specified', () => {
     client.pageView({ data: { id: 'page' } })
     expect(client.events.find((e) => e.type === EventTypes.pageView && e.data.id === 'page')).toBeDefined()
+  })
+
+  describe('pageExit()', () => {
+    it('pageExit is called on window unload', () => {
+      // Simulate unload event
+      client.onUnload(new Event('unload'))
+      expect(client.events.find((e) => e.type === EventTypes.pageExit)).toBeDefined()
+    })
+
+    it('pageExit() adds a new pageExit event with data we specified', () => {
+      client.pageExit({ data: { id: 'page' } })
+      expect(client.events.find((e) => e.type === EventTypes.pageExit && e.data.id === 'page')).toBeDefined()
+    })
   })
 
   it('action() adds a new action event with label specified', () => {
