@@ -13,7 +13,9 @@ describe('client', () => {
     expect(client.events).toBeDefined()
   })
 
-  it('creates pageView event automatically', () => {
+  it('pageView is called on window load', () => {
+    // Simulate unload event
+    client.onLoad(new Event('load'))
     expect(client.events.find((e) => e.type === EventTypes.pageView)).toBeDefined()
   })
 
@@ -67,9 +69,8 @@ describe('client', () => {
       expect(client.events.find((e) => e.type === EventTypes.error && e.label === 'Custom Error')).toBeDefined()
     })
     it('throwing an error creates a new error event', () => {
-      window.onerror?.call('', 'My Error', 'file.js', 1, 0)
+      client.onError(new ErrorEvent('error', { error: new Error('My Error') }))
       const errorEvent = client.events[client.events.length - 1]
-      expect(window.onerror).toBeCalled
       expect(errorEvent).toBeDefined()
       expect(errorEvent?.data.message).toBe('My Error')
     })
