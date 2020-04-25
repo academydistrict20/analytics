@@ -33,7 +33,9 @@ export interface AnalyticsClient {
   }): AnalyticsEvent
 }
 
-export default function createClient(): AnalyticsClient {
+export default function createClient(options?: { disableErrorWatching?: boolean }): AnalyticsClient {
+  options = options || { disableErrorWatching: false }
+
   const context = getContext()
 
   const client: AnalyticsClient = {
@@ -70,8 +72,24 @@ export default function createClient(): AnalyticsClient {
     },
   }
 
+  const handleError: OnErrorEventHandlerNonNull = (
+    message: string | Event,
+    source?: string,
+    lineno?: number,
+    colno?: number,
+    error?: Error,
+  ) => {
+    client.error({
+      data: { message, source, lineno, colno, error },
+    })
+  }
+
   // TODO: Move into onload
   client.pageView()
+
+  if (!options.disableErrorWatching) {
+    window.onerror = handleError
+  }
 
   return client
 }
