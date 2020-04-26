@@ -1,7 +1,6 @@
 module.exports = {
-  extends: 'semantic-release-monorepo',
   branches: ['master', 'next'],
-  
+
   plugins: [
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
@@ -15,5 +14,5 @@ module.exports = {
       },
     ],
     '@semantic-release/github',
-  ]
+  ],
 }
