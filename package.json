@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/academydistrict20/analytics.git"
   },
-  "author": "Academy District 20",
+  "author": "Academy District 20 <socialmedia@asd20.org>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/academydistrict20/analytics/issues"
