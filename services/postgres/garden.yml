@@ -1,0 +1,29 @@
+kind: Module
+name: postgres-data
+description: Presistent Volume for Postgres Data
+type: persistentvolumeclaim
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 500Mi
+---
+kind: Module
+type: container
+name: postgres
+description: Postgres SQL Database
+image: postgres:11.5-alpine
+services:
+  - name: postgres
+    replicas: 1  # <- Important! Unless your volume supports ReadWriteMany, you can't run multiple replicas with it
+    volumes:
+      - name: postgres-data
+        module: postgres-data
+        containerPath: /var/lib/postgresql/data
+    ports:
+      - name: postgres
+        containerPort: 5432
+    env:
+      POSTGRES_USER: admin
+      POSTGRES_DB: analytics
+    

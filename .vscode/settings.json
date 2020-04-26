@@ -11,5 +11,18 @@
     "release",
     "client",
     "project"
+  ],
+  "sqltools.connections": [
+    {
+      "askForPassword": false,
+      "database": "analytics",
+      "dialect": "PostgreSQL",
+      "isActive": false,
+      "isConnected": false,
+      "name": "analytics-local-postgres",
+      "port": 5432,
+      "server": "localhost",
+      "username": "admin"
+    }
   ]
 }

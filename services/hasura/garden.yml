@@ -1,0 +1,22 @@
+kind: Module
+type: container
+name: hasura
+description: Hasura GrapQL Engine
+image: hasura/graphql-engine:v1.2.0-beta.5
+services:
+  - name: hasura
+    replicas: 1  # <- Important! Unless your volume supports ReadWriteMany, you can't run multiple replicas with it
+    ports:
+      - name: hasura-console
+        containerPort: 8080
+    ingresses:
+      - hostname: api.analytics.dev
+        port: hasura-console
+    env:
+      HASURA_GRAPHQL_ADMIN_SECRET: "admin"
+      HASURA_GRAPHQL_DATABASE_URL: postgres://admin:@postgres/analytics
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      HASURA_GRAPHQL_DBNAME: "analytics"
+    dependencies:
+      - postgres
