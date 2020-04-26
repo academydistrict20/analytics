@@ -36,8 +36,8 @@ This will enable services to run locally over TLS on *.analytics.dev
 # Install hosts A CLI for managing your machine's `/etc/hosts` file
 brew install xwmx/taps/hosts
 
-# Add a host
-hosts add 127.0.0.1 analytics.dev
+# Add the analytics.dev host for the minikube ip
+sudo hosts add `minikube ip` analytics.dev
 ```
 
 ### Step 5. Install [mkcert](https://github.com/FiloSottile/mkcert#installation) and create a certificate
@@ -45,7 +45,8 @@ hosts add 127.0.0.1 analytics.dev
 ```bash
 # Install mkcert
 brew install mkcert
-brew install nss # if you use Firefox
+# If you use Firefox (optional)
+brew install nss
 
 # Generate and install certificates
 mkcert -install
@@ -53,6 +54,8 @@ mkcert analytics.dev '*.analytics.dev'
 ```
 
 ### Step 6. Configure the certificate in your Kubernetes installation
+
+Create a secret with TLS certificate/key and add it to your loccal Kubernetes cluster
 
 ```bash
 kubectl create secret tls tls-analytics-dev --key analytics.dev+1-key.pem --cert analytics.dev+1.pem
