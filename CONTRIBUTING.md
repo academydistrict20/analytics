@@ -37,7 +37,9 @@ This will enable services to run locally over TLS on *.analytics.dev
 brew install xwmx/taps/hosts
 
 # Add the analytics.dev host for the minikube ip
+sudo hosts remove *.analytics.dev --force
 sudo hosts add `minikube ip` analytics.dev
+sudo hosts add `minikube ip` api.analytics.dev
 ```
 
 ### Step 5. Install [mkcert](https://github.com/FiloSottile/mkcert#installation) and create a certificate
