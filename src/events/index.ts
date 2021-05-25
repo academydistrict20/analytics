@@ -3,6 +3,7 @@ import finder from '@medv/finder'
 import { AnalyticsContext } from '../context'
 
 export enum EventTypes {
+  pageExit = 'pageExit',
   pageView = 'pageView',
   event = 'event',
   action = 'action',
