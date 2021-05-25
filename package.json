@@ -14,7 +14,7 @@
     "@medv/finder": "^1.1.2",
     "@types/uuid": "^7.0.2",
     "bowser": "^2.9.0",
-    "uuid": "^7.0.3"
+    "uuid": "^8.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
